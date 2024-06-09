@@ -28,7 +28,7 @@ class ReconcilerController {
     } catch (error: any) {
       console.log(error, "error caught!");
 
-      reply.status(500).send({ msg: error?.message, description:"Unexpected error occurred!"});
+      reply.status(500).send({ message: error?.message, description:"Unexpected error occurred!"});
     }
   }
 }

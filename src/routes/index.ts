@@ -10,15 +10,33 @@ const identifySchema = {
       email: { type: 'string' },
       phoneNumber: { type: 'string' }
     },
-    required: ["email","phoneNumber"] // Add any required fields here, if any
+    required: ['email', 'phoneNumber'] // Specify required fields here if needed
   },
   response: {
     200: {
       type: 'object',
       properties: {
-        success: { type: 'boolean' },
-        data: { type: 'object' }
-      }
+        contact: {
+          type: 'object',
+          properties: {
+            primaryLinkedId: { type: 'number' },
+            emails: {
+              type: 'array',
+              items: { type: 'string' }
+            },
+            phoneNumbers: {
+              type: 'array',
+              items: { type: 'string' }
+            },
+            secondaryContacts: {
+              type: 'array',
+              items: { type: 'number' }
+            }
+          },
+          required: ['primaryLinkedId', 'emails', 'phoneNumbers', 'secondaryContacts']
+        }
+      },
+      required: ['contact']
     }
   }
 };

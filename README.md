@@ -1,4 +1,9 @@
-# bitespeed-identity-reconcilation
-Service to reconcile identity of the users
+# Bitespeed-Identity-Reconcilation-Task:
+Service reconciles users based on their phoneNumber, email or creates a new Contact.
 
-# Node Type Script Reconcilation task
+# To launch service:
+1. npm install .
+2. setup .env with Database URL.
+3. npm run dev --> run the service locally.
+
+# Hosted instance at : 

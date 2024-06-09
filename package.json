@@ -1,0 +1,33 @@
+{
+  "name": "bitespeed-identity-reconcilation",
+  "version": "1.0.0",
+  "description": "Service to reconcile identity of the users",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p tsconfig.json",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/navGit-Hub/bitespeed-identity-reconcilation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/navGit-Hub/bitespeed-identity-reconcilation/issues"
+  },
+  "homepage": "https://github.com/navGit-Hub/bitespeed-identity-reconcilation#readme",
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "@fastify/formbody": "^7.4.0",
+    "@prisma/client": "^5.15.0",
+    "fastify": "^4.27.0"
+  }
+}

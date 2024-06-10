@@ -7,3 +7,4 @@ Service reconciles users based on their phoneNumber, email or creates a new Cont
 3. npm run dev --> run the service locally.
 
 # Hosted instance at : 
+http://54.144.132.220

@@ -5,9 +5,6 @@ class ReconcileDao {
   async identifyUpdateUsers(data: { email?: string; phoneNumber?: string }) {
     let contacts: any;
 
-    // todo: implement error handling and check whether null values should be stored as contact or not.
-    // todo: Since email and phone number is optional we can allow them to be added with a null value.
-    // todo: logic for null phone and emails.
 
     // When both email and phone numbers are provided the matching is done right but when either of them are null then the matching has to happen.
 

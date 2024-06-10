@@ -5,20 +5,16 @@ class ReconcileDao {
   async identifyUpdateUsers(data: { email?: string; phoneNumber?: string }) {
     let contacts: any;
 
-// todo: implement error handling and check whether null values should be stored as contact or not.
-// todo: Since email and phone number is optional we can allow them to be added with a null value.
-// todo: logic for null phone and emails.
- 
-
-
+    // todo: implement error handling and check whether null values should be stored as contact or not.
+    // todo: Since email and phone number is optional we can allow them to be added with a null value.
+    // todo: logic for null phone and emails.
 
     // When both email and phone numbers are provided the matching is done right but when either of them are null then the matching has to happen.
 
     // PhoneNumber or Email either of them might be null, but we can get the primaryId and then match the secondary records or we might get the secondary records and identify the primary record and match accordingly.
 
     if (!data.phoneNumber || !data.email) {
-
-      const where: Prisma.ContactWhereInput = {
+      const where = {
         ...(data.email ? { email: data.email } : {}),
         ...(data.phoneNumber ? { phoneNumber: data.phoneNumber } : {}),
       };
@@ -27,36 +23,42 @@ class ReconcileDao {
         where,
       });
 
-      if(!fuzzyRecord)
-          throw new Error("No Contact Found!");
-
-      // if fuzzy record not found add some logic here.
-
-      if (!fuzzyRecord?.linkedId) {
+      if (!fuzzyRecord) {
         contacts = [
-          fuzzyRecord,
-          ...(await client.contact.findMany({
-            where: {
-              linkedId: fuzzyRecord?.id,
+          await client.contact.create({
+            data: {
+              ...where,
+              linkPrecedence: "primary",
             },
-            orderBy: {
-              createdAt: "asc",
-            },
-          })),
+          }),
         ];
-      } else if (fuzzyRecord?.linkedId) {
-        const primaryRecord = await client.contact.findUnique({
-          where: { id: fuzzyRecord?.linkedId },
-        });
+      } else {
+        if (!fuzzyRecord?.linkedId) {
+          contacts = [
+            fuzzyRecord,
+            ...(await client.contact.findMany({
+              where: {
+                linkedId: fuzzyRecord?.id,
+              },
+              orderBy: {
+                createdAt: "asc",
+              },
+            })),
+          ];
+        } else if (fuzzyRecord?.linkedId) {
+          const primaryRecord = await client.contact.findUnique({
+            where: { id: fuzzyRecord?.linkedId },
+          });
 
-        contacts = [
-          primaryRecord,
-          ...(await client.contact.findMany({
-            where: {
-              linkedId: fuzzyRecord?.linkedId,
-            },
-          })),
-        ];
+          contacts = [
+            primaryRecord,
+            ...(await client.contact.findMany({
+              where: {
+                linkedId: fuzzyRecord?.linkedId,
+              },
+            })),
+          ];
+        }
       }
     } else if (data.phoneNumber && data.email) {
       const OR = [
@@ -74,10 +76,7 @@ class ReconcileDao {
       });
     }
 
-    console.log("contacts",contacts);
-
-    if(!contacts)
-      throw new Error("No contacts found");
+    console.log("contacts", contacts);
 
     // If more than one primary records are fetched then the earliest record has to be updated as the new primary record and other linkedId has to be updated accordingly.
     let res: {
@@ -158,7 +157,6 @@ class ReconcileDao {
           }
         }
         // update the response (res)
-
         if (
           updatedContact.email &&
           !res.emails.some((email) => updatedContact.email === email)
